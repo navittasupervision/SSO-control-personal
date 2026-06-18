@@ -1,0 +1,73 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────
+// REGLAS DE SEGURIDAD - Control de Personal SSO
+//
+// Cómo desplegarlas:
+//   Firebase Console > Firestore Database > Reglas > pega este archivo > Publicar
+//
+// IMPORTANTE - Arranque del primer administrador:
+//   Antes de usar /setup-inicial, crea manualmente en Firestore (consola)
+//   el documento:  settings/bootstrap   con el campo:  adminExists: false
+//   Estas reglas permiten que, mientras adminExists sea false, cualquier
+//   persona pueda crear EXACTAMENTE un usuario con rol "admin" y luego
+//   marcar adminExists como true. Después de eso, la puerta se cierra
+//   para siempre y solo un administrador ya autenticado puede crear
+//   nuevos usuarios.
+// ─────────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/monitors/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/monitors/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function myCompanyIds() {
+      return get(/databases/$(database)/documents/monitors/$(request.auth.uid)).data.companyIds;
+    }
+
+    function bootstrapOpen() {
+      return exists(/databases/$(database)/documents/settings/bootstrap) &&
+        get(/databases/$(database)/documents/settings/bootstrap).data.adminExists == false;
+    }
+
+    // Lista de usuarios visible en la pantalla de login (no contiene PIN).
+    match /monitors/{uid} {
+      allow read: if true;
+      allow create: if isAdmin() || (request.auth == null && bootstrapOpen() && request.resource.data.role == 'admin');
+      allow update, delete: if isAdmin();
+    }
+
+    match /settings/bootstrap {
+      allow read: if true;
+      allow update: if isAdmin() ||
+        (request.auth == null && resource.data.adminExists == false && request.resource.data.adminExists == true);
+      allow create: if false; // este documento se crea manualmente una sola vez
+    }
+
+    match /settings/theme {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /companies/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /positions/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /dailyRecords/{id} {
+      allow read: if request.auth != null && (isAdmin() || resource.data.companyId in myCompanyIds());
+      allow create: if request.auth != null && (isAdmin() || request.resource.data.companyId in myCompanyIds());
+      allow update: if request.auth != null && (isAdmin() || resource.data.companyId in myCompanyIds());
+      allow delete: if isAdmin();
+    }
+  }
+}

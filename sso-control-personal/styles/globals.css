@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #1B3A4B;
+  --color-primary-dark: #10242F;
+  --color-primary-light: #2E5A73;
+  --color-accent: #E8590C;
+  --color-success: #2F9E44;
+  --color-warning: #F2B705;
+  --color-danger: #E03131;
+  --color-surface: #F7F8FA;
+  --color-ink: #1A1D21;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+html,
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+/* Numpad de PIN: que los botones se sientan táctiles en tablet/celular */
+.pin-key {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
