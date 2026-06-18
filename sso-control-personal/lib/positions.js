@@ -5,8 +5,6 @@ import {
   updateDoc,
   deleteDoc,
   getDocs,
-  query,
-  orderBy,
   writeBatch,
 } from 'firebase/firestore';
 import { db } from './firebase';
@@ -15,8 +13,14 @@ import { PUESTOS_CATALOGO } from './catalog';
 const COL = 'positions';
 
 export async function listPositions() {
-  const snap = await getDocs(query(collection(db, COL), orderBy('categoria'), orderBy('nombre')));
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const snap = await getDocs(collection(db, COL));
+  const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  items.sort((a, b) => {
+    const catCompare = (a.categoria || '').localeCompare(b.categoria || '');
+    if (catCompare !== 0) return catCompare;
+    return (a.nombre || '').localeCompare(b.nombre || '');
+  });
+  return items;
 }
 
 export async function createPosition({ nombre, categoria }) {
