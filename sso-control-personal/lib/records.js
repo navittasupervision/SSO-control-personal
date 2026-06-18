@@ -56,15 +56,13 @@ export function summarizeEntries(entries = []) {
 
 /** Lista registros de una empresa dentro de un rango de fechas (inclusive). */
 export async function listRecordsByCompanyAndRange(companyId, startDate, endDate) {
-  const q = query(
-    collection(db, COL),
-    where('companyId', '==', companyId),
-    where('date', '>=', startDate),
-    where('date', '<=', endDate),
-    orderBy('date', 'asc')
-  );
+  const q = query(collection(db, COL), where('companyId', '==', companyId));
   const snap = await getDocs(q);
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const items = snap.docs
+    .map((d) => ({ id: d.id, ...d.data() }))
+    .filter((r) => r.date >= startDate && r.date <= endDate);
+  items.sort((a, b) => a.date.localeCompare(b.date));
+  return items;
 }
 
 /** Lista los registros de TODAS las empresas en una fecha dada (para el dashboard). */
