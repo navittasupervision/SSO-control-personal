@@ -24,7 +24,7 @@ export async function getDailyRecord(companyId, date) {
 
 /**
  * Crea o actualiza (merge) el registro diario de una empresa.
- * entries: [{ name, position, status, notes }]
+ * entries: [{ workerId, name, position, status }]
  */
 export async function saveDailyRecord({ companyId, companyName, date, entries, monitorId, monitorName }) {
   const ref = doc(db, COL, recordId(companyId, date));
