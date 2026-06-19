@@ -7,6 +7,7 @@ const ADMIN_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
   { href: '/dashboard/reportes', label: 'Reportes', icon: '🗂️' },
   { href: '/dashboard/empresas', label: 'Empresas', icon: '🏗️' },
+  { href: '/dashboard/trabajadores', label: 'Trabajadores', icon: '👷' },
   { href: '/dashboard/monitores', label: 'Monitores SSO', icon: '🧑‍💼' },
   { href: '/dashboard/puestos', label: 'Catálogo de puestos', icon: '🛠️' },
   { href: '/dashboard/configuracion', label: 'Configuración', icon: '⚙️' },
