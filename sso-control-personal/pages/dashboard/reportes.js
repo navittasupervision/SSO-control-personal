@@ -54,9 +54,9 @@ function ReportesContent() {
       <p className="text-ink/50 text-sm mb-6">Consulta el historial por empresa y período, y descarga el PDF.</p>
 
       <div className="bg-white rounded-card shadow-card p-5 flex flex-wrap gap-3 items-end mb-6">
-        <div>
+        <div className="w-full sm:w-auto">
           <label className="block text-xs font-medium text-ink/60 mb-1">Empresa</label>
-          <select value={companyId} onChange={(e) => setCompanyId(e.target.value)} className="border rounded-card px-3 py-2 text-sm min-w-[14rem]">
+          <select value={companyId} onChange={(e) => setCompanyId(e.target.value)} className="border rounded-card px-3 py-2 text-sm w-full sm:min-w-[14rem]">
             {companies.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -64,15 +64,15 @@ function ReportesContent() {
             ))}
           </select>
         </div>
-        <div>
+        <div className="w-full sm:w-auto">
           <label className="block text-xs font-medium text-ink/60 mb-1">Desde</label>
-          <input type="date" value={startDate} max={endDate} onChange={(e) => setStartDate(e.target.value)} className="border rounded-card px-3 py-2 text-sm" />
+          <input type="date" value={startDate} max={endDate} onChange={(e) => setStartDate(e.target.value)} className="border rounded-card px-3 py-2 text-sm w-full" />
         </div>
-        <div>
+        <div className="w-full sm:w-auto">
           <label className="block text-xs font-medium text-ink/60 mb-1">Hasta</label>
-          <input type="date" value={endDate} max={todayStr()} onChange={(e) => setEndDate(e.target.value)} className="border rounded-card px-3 py-2 text-sm" />
+          <input type="date" value={endDate} max={todayStr()} onChange={(e) => setEndDate(e.target.value)} className="border rounded-card px-3 py-2 text-sm w-full" />
         </div>
-        <button onClick={handleSearch} disabled={loading || !companyId} className="bg-primary text-white px-4 py-2.5 rounded-card font-medium text-sm disabled:opacity-40">
+        <button onClick={handleSearch} disabled={loading || !companyId} className="bg-primary text-white px-4 py-2.5 rounded-card font-medium text-sm disabled:opacity-40 w-full sm:w-auto">
           {loading ? 'Buscando…' : 'Buscar'}
         </button>
         <PdfReportButton companyName={companyName} startDate={startDate} endDate={endDate} records={records} theme={theme} />
@@ -83,20 +83,19 @@ function ReportesContent() {
       {searched && !loading && records.length === 0 && <p className="text-ink/40">No hay registros en ese período.</p>}
 
       {records.map((r) => (
-        <div key={r.id} className="bg-white rounded-card shadow-card p-5 mb-4">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="font-medium">{r.date}</h2>
-            <span className="text-xs text-ink/50">
+        <div key={r.id} className="bg-white rounded-card shadow-card p-5 mb-4 overflow-x-auto">
+          <div className="flex justify-between items-center mb-3 gap-3">
+            <h2 className="font-medium whitespace-nowrap">{r.date}</h2>
+            <span className="text-xs text-ink/50 whitespace-nowrap">
               Total: {r.totals?.total ?? r.entries?.length ?? 0} · Presente: {r.totals?.presente ?? 0} · Ausente: {r.totals?.ausente ?? 0}
             </span>
           </div>
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[420px]">
             <thead className="text-ink/50 text-left">
               <tr>
                 <th className="py-1 font-medium">Nombre</th>
                 <th className="py-1 font-medium">Puesto</th>
                 <th className="py-1 font-medium">Estado</th>
-                <th className="py-1 font-medium">Notas</th>
               </tr>
             </thead>
             <tbody>
@@ -107,7 +106,6 @@ function ReportesContent() {
                   <td className="py-1.5">
                     <StatusBadge status={e.status} />
                   </td>
-                  <td className="py-1.5 text-ink/50">{e.notes}</td>
                 </tr>
               ))}
             </tbody>
