@@ -47,21 +47,21 @@ function EmpresasContent() {
       <p className="text-ink/50 text-sm mb-6">Agrega y administra las empresas/subcontratistas en obra.</p>
 
       <form onSubmit={handleCreate} className="bg-white rounded-card shadow-card p-5 flex flex-wrap gap-3 items-end mb-6">
-        <div>
+        <div className="w-full sm:w-auto">
           <label className="block text-xs font-medium text-ink/60 mb-1">Nombre de la empresa</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Ej. Construcciones del Valle S.A."
-            className="border rounded-card px-3 py-2 text-sm min-w-[16rem]"
+            className="border rounded-card px-3 py-2 text-sm w-full sm:min-w-[16rem]"
           />
         </div>
-        <div>
+        <div className="w-full sm:w-auto">
           <label className="block text-xs font-medium text-ink/60 mb-1">Especialidad</label>
           <select
             value={specialty}
             onChange={(e) => setSpecialty(e.target.value)}
-            className="border rounded-card px-3 py-2 text-sm"
+            className="border rounded-card px-3 py-2 text-sm w-full"
           >
             {ESPECIALIDADES_EMPRESA.map((s) => (
               <option key={s} value={s}>
@@ -70,13 +70,13 @@ function EmpresasContent() {
             ))}
           </select>
         </div>
-        <button disabled={saving} className="bg-accent text-white px-4 py-2.5 rounded-card font-medium text-sm disabled:opacity-40">
+        <button disabled={saving} className="bg-accent text-white px-4 py-2.5 rounded-card font-medium text-sm disabled:opacity-40 w-full sm:w-auto">
           {saving ? 'Agregando…' : '+ Agregar empresa'}
         </button>
       </form>
 
-      <div className="bg-white rounded-card shadow-card overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-card shadow-card overflow-x-auto">
+        <table className="w-full text-sm min-w-[480px]">
           <thead className="bg-surface text-ink/60 text-left">
             <tr>
               <th className="px-4 py-2 font-medium">Empresa</th>
