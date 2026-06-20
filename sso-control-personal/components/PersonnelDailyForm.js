@@ -134,47 +134,33 @@ export default function PersonnelDailyForm({ companies, positions, monitorId, mo
       )}
 
       {rows.length > 0 && (
-        <div className="bg-white rounded-card shadow-card overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-surface text-ink/60 text-left">
-              <tr>
-                <th className="px-4 py-2 font-medium">Nombre</th>
-                <th className="px-4 py-2 font-medium">Puesto</th>
-                <th className="px-4 py-2 font-medium">Estado</th>
-                <th className="px-2 py-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.workerId} className="border-t">
-                  <td className="px-4 py-2 font-medium">{row.name}</td>
-                  <td className="px-4 py-2 text-ink/60">{row.position}</td>
-                  <td className="px-4 py-2">
-                    <select
-                      value={row.status}
-                      onChange={(e) => updateStatus(row.workerId, e.target.value)}
-                      className="border-0 focus:ring-1 focus:ring-primary rounded px-2 py-1 bg-surface/60"
-                    >
-                      {ESTADOS_PERSONAL.map((e) => (
-                        <option key={e.valor} value={e.valor}>
-                          {e.etiqueta}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="px-2 py-2 text-center">
-                    <button
-                      onClick={() => handleDeactivate(row.workerId, row.name)}
-                      title="Dar de baja de la lista"
-                      className="text-ink/30 hover:text-danger text-xs"
-                    >
-                      Dar de baja
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="bg-white rounded-card shadow-card divide-y">
+          {rows.map((row) => (
+            <div key={row.workerId} className="flex flex-wrap items-center gap-3 px-4 py-3">
+              <div className="flex-1 min-w-[140px]">
+                <p className="font-medium text-sm">{row.name}</p>
+                <p className="text-xs text-ink/50">{row.position}</p>
+              </div>
+              <select
+                value={row.status}
+                onChange={(e) => updateStatus(row.workerId, e.target.value)}
+                className="border rounded-card px-2 py-1.5 text-sm bg-surface/60"
+              >
+                {ESTADOS_PERSONAL.map((e) => (
+                  <option key={e.valor} value={e.valor}>
+                    {e.etiqueta}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => handleDeactivate(row.workerId, row.name)}
+                title="Dar de baja de la lista"
+                className="text-ink/30 hover:text-danger text-xs whitespace-nowrap"
+              >
+                Dar de baja
+              </button>
+            </div>
+          ))}
         </div>
       )}
 
